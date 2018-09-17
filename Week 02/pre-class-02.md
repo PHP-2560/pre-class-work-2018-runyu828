@@ -20,12 +20,15 @@ then this results in 10 exponentially distributed numbers with a rate \(\lambda=
 
 1. Generate 200 random values from the standard exponential distribution and store them in a vector `exp.draws.1`.  Find the mean and standard deviation of `exp.draws.1`.
 
+
 2. Repeat, but change the rate to 0.2, 5, 7.3 and 10, storing the results in vectors called  `exp.draws.0.2`,  `exp.draws.5`,  `exp.draws.7.3` and  `exp.draws.10`. 
 
+
 3. The function `plot()` is the generic function in R for the visual display of data. `hist()` is a function that takes in and bins data as a side effect. To use this function, we must first specify what we'd like to plot.
-    a. Use the `hist()` function to produce a histogram of your standard exponential distribution. 
+    a. Use the `hist()` function to produce a histogram of your standard exponential distribution.
     b. Use `plot()` with this vector to display the random values from your standard distribution in order.
     c. Now, use `plot()` with two arguments -- any two of your other stored random value vectors -- to create a scatterplot of the two vectors against each other.
+
 
 4. We'd now like to compare the properties of each of our vectors. Begin by creating a vector of the means of each of our five distributions in the order we created them and saving this to a variable name of your choice. Using this and other similar vectors, create the following scatterplots and explain in words what is going on:
     a. The five means versus the five rates used to generate the distribution.
@@ -46,3 +49,54 @@ For each plot, explain in words what's going on.
     e. Calculate the mean of the 371st column of `big.exp.draws.1.mat`.
     f. Now, find the means of all 1000 columns of `big.exp.draws.1.mat` simultaneously. Plot the histogram of column means.  Explain why its shape does not match the histogram in problem 5b).
    
+   
+Here is the coding part of questions:
+
+exp.draw.1 <- rexp(200) # 1
+mean(exp.draw.1) # 1
+[1] 0.9087987
+> sd(exp.draw.1) #1 
+[1] 0.9079666
+exp.draw.0.2 <- rexp(n=200,rate=0.2) #2
+exp.draw.5 <- rexp(n=200,rate=5)
+exp.draw.7.3 <- rexp(n=200,rate=7.3)
+exp.draw.10<- rexp(n=200,rate=10)
+hist(exp.draw.1) # 3a
+plot(exp.draw.1) # 3b
+plot(exp.draw.10, exp.draw.0.2) # 3c
+x <- list(exp.draw.1,exp.draw.0.2,exp.draw.5,exp.draw.7.3,exp.draw.10) # 4a
+means1 <- lapply(x,mean)
+means2 <- unlist(means1)
+rate <- c(1,0.2,5,7.3,10)   
+plot(rate, means2)
+
+sd1 <- lapply(x, sd) # 4b
+sd2 <- unlist(sd1)
+plot(rate, sd2)
+
+plot(means2, sd2) # 4c
+
+big.exp.draw.1 <- rexp(1.1*10**6) #1 a
+mean(big.exp.draw.1)
+[1] 1.000859
+sd(big.exp.draw.1)
+[1] 0.9991809
+
+hist(big.exp.draw.1) #b
+
+vectors1 <- big.exp.draw.1[big.exp.draw.1>1] #c
+mean(vectors1)
+[1] 1.999717
+
+big.exp.draw.1.mat <- matrix(big.exp.draw.1, ncol = 1000, nrow = 1100) #d
+hist(big.exp.draw.1.mat)
+
+mean(big.exp.draw.1.mat[371,]) #e
+[1] 0.9698581
+
+mean(big.exp.draw.1.mat[1:1000,]) #f
+[1] 1.000594
+
+hist(colMeans(big.exp.draw.1.mat, dims = 1))
+
+
